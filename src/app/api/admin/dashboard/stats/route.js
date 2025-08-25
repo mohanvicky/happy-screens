@@ -57,14 +57,42 @@ export async function GET(request) {
         monthlyRevenue: monthlyBookings[0]?.total || 0,
         recentBookings
       }
+
+      return NextResponse.json({ 
+        success: true, 
+        stats, 
+        user: { 
+          role: user.role, 
+          username: user.username,
+          assignedLocations: user.assignedLocations
+        } 
+      })
     } else {
-      // Normal admin: extract location IDs properly
+      // Normal admin: extract location IDs and names properly
       const userLocationIds = user.assignedLocations.map(loc => {
         if (typeof loc === 'object' && loc._id) {
           return loc._id.toString()
         }
         return loc.toString()
       })
+
+      // Extract location names for comma-separated string
+      const locationNames = user.assignedLocations.map(loc => {
+        if (typeof loc === 'object' && loc.name) {
+          return loc.name
+        }
+        // If location is just an ID, we need to fetch the name
+        return null
+      }).filter(name => name !== null)
+
+      // If we don't have location names (locations are just IDs), fetch them
+      let finalLocationNames = locationNames
+      if (locationNames.length === 0 && userLocationIds.length > 0) {
+        const locationDocs = await Location.find({
+          _id: { $in: userLocationIds.map(id => new mongoose.Types.ObjectId(id)) }
+        }).select('name').lean()
+        finalLocationNames = locationDocs.map(loc => loc.name)
+      }
 
       const [bookings, screens, recentBookings] = await Promise.all([
         Booking.countDocuments({ 
@@ -89,7 +117,6 @@ export async function GET(request) {
       currentMonth.setDate(1)
       currentMonth.setHours(0, 0, 0, 0)
       
-      // Use string IDs instead of ObjectId conversion for aggregation
       const monthlyBookings = await Booking.aggregate([
         { 
           $match: { 
@@ -116,16 +143,17 @@ export async function GET(request) {
         monthlyRevenue: monthlyBookings[0]?.total || 0,
         recentBookings
       }
-    }
 
-    return NextResponse.json({ 
-      success: true, 
-      stats, 
-      user: { 
-        role: user.role, 
-        username: user.username 
-      } 
-    })
+      return NextResponse.json({ 
+        success: true, 
+        stats, 
+        user: { 
+          role: user.role, 
+          username: user.username,
+          assignedLocations: finalLocationNames.join(', ') // Comma-separated location names
+        } 
+      })
+    }
 
   } catch (error) {
     console.error('Dashboard stats error:', error)

@@ -29,7 +29,8 @@ import {
   Assessment,
   Add,
   TrendingUp,
-  PhotoLibrary
+  PhotoLibrary,
+  Logout // ✅ Correct icon import
 } from '@mui/icons-material'
 import { useRouter } from 'next/navigation'
 
@@ -120,47 +121,11 @@ export default function AdminDashboard() {
 
   const managementActions = [
     {
-      label: 'Manage Events',
-      icon: <Event />,
-      path: '/admin/events',
-      description: 'Create and manage event types'
-    },
-    {
-      label: 'Time Slots',
-      icon: <AccessTime />,
-      path: '/admin/slots',
-      description: 'Define available time slots'
-    },
-    {
-      label: 'Schedules',
-      icon: <Schedule />,
-      path: '/admin/schedules',
-      description: 'Assign events to screens and dates'
-    },
-    {
-      label: 'Manage Screens',
-      icon: <Movie />,
-      path: '/admin/screens',
-      description: 'Manage screen configurations'
-    },
-    {
-      label: 'View Reports',
-      icon: <Assessment />,
-      path: '/admin/reports',
-      description: 'Analytics and booking reports'
-    },
-    {
       label: 'Bookings',
       icon: <Event />,
       path: '/admin/bookings',
       color: 'success',
       description: 'Manage customer bookings'
-    },
-    {
-      label: 'Dashboard Settings',
-      icon: <Dashboard />,
-      path: '/admin/settings',
-      description: 'Configure dashboard preferences'
     },
     {
       label: 'Gallery',
@@ -183,18 +148,16 @@ export default function AdminDashboard() {
               Welcome back, {user?.username}
             </Typography>
           </Box>
-          <Box sx={{ display: 'flex', gap: 2 }}>
-            <Button 
-              variant="outlined" 
-              onClick={() => router.push('/book')}
-              startIcon={<Add />}
-            >
-              Test Booking
-            </Button>
-            <Button variant="text" color="error" onClick={handleLogout}>
-              Logout
-            </Button>
-          </Box>
+
+          {/* ✅ Fixed Logout Button */}
+          <Button
+            variant="contained"
+            color="error"
+            onClick={handleLogout}
+            startIcon={<Logout />}
+          >
+            Logout
+          </Button>
         </Box>
       </Box>
 
@@ -284,7 +247,7 @@ export default function AdminDashboard() {
           </Grid>
         </Grid>
 
-        {/* Recent Bookings (if any) */}
+        {/* Recent Bookings */}
         {stats?.recentBookings && stats.recentBookings.length > 0 && (
           <Paper sx={{ p: 3, mb: 3 }}>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
@@ -355,7 +318,7 @@ export default function AdminDashboard() {
             </Grid>
             <Grid item xs={12} sm={6}>
               <Typography variant="body2">
-                <strong>Assigned Locations:</strong> {user?.assignedLocations?.length || 'All'}
+                <strong>Assigned Locations:</strong> {user?.assignedLocations || 'All'}
               </Typography>
             </Grid>
           </Grid>

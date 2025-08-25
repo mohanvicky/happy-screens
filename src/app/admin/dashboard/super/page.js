@@ -30,7 +30,8 @@ import {
   Schedule,
   Settings,
   Assessment,
-  PhotoLibrary
+  PhotoLibrary,
+  Logout
 } from '@mui/icons-material'
 import { useRouter } from 'next/navigation'
 
@@ -80,7 +81,7 @@ export default function SuperAdminDashboard() {
     console.log('Function called with path:', path)
     console.log('Router object:', router)
     console.log('========================')
-    
+
     try {
       router.push(path)
       console.log('Router.push called successfully')
@@ -140,12 +141,6 @@ export default function SuperAdminDashboard() {
 
   const managementButtons = [
     {
-      label: 'Manage Users',
-      icon: <People />,
-      path: '/admin/users',
-      color: 'primary'
-    },
-    {
       label: 'Manage Events',
       icon: <Event />,
       path: '/admin/events',
@@ -156,12 +151,6 @@ export default function SuperAdminDashboard() {
       icon: <AccessTime />,
       path: '/admin/slots',
       color: 'info'
-    },
-    {
-      label: 'Schedules',
-      icon: <Schedule />,
-      path: '/admin/schedules',
-      color: 'warning'
     },
     {
       label: 'Locations',
@@ -187,12 +176,6 @@ export default function SuperAdminDashboard() {
       icon: <PhotoLibrary />, // Add this import
       path: '/admin/gallery',
       color: 'secondary'
-    },
-    {
-      label: 'Settings',
-      icon: <Settings />,
-      path: '/admin/settings',
-      color: 'inherit'
     }
   ]
 
@@ -205,21 +188,19 @@ export default function SuperAdminDashboard() {
             Super Admin Dashboard
           </Typography>
           <Box sx={{ display: 'flex', gap: 2 }}>
-            <Button 
-              variant="outlined" 
+            <Button
+              variant="outlined"
               onClick={() => handleNavigation('/admin/users')}
               startIcon={<People />}
             >
               Manage Users
             </Button>
-            <Button 
-              variant="outlined" 
-              onClick={() => handleNavigation('/book')}
-              startIcon={<Add />}
+            <Button
+              variant="contained"
+              color="error"
+              onClick={handleLogout}
+              startIcon={<Logout />}
             >
-              Test Booking
-            </Button>
-            <Button variant="text" color="error" onClick={handleLogout}>
               Logout
             </Button>
           </Box>
@@ -234,9 +215,9 @@ export default function SuperAdminDashboard() {
               <Card sx={{ height: '100%' }}>
                 <CardContent>
                   <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                    <Box sx={{ 
-                      p: 1, 
-                      borderRadius: '50%', 
+                    <Box sx={{
+                      p: 1,
+                      borderRadius: '50%',
                       bgcolor: stat.color,
                       color: 'primary.main',
                       mr: 2
@@ -283,7 +264,7 @@ export default function SuperAdminDashboard() {
               <Grid container spacing={2}>
                 {managementButtons.map((btn, index) => (
                   <Grid item xs={12} sm={6} md={4} key={index}>
-                    <Button 
+                    <Button
                       variant="outlined"
                       color={btn.color}
                       startIcon={btn.icon}
@@ -294,7 +275,7 @@ export default function SuperAdminDashboard() {
                         handleNavigation(btn.path)
                       }}
                       fullWidth
-                      sx={{ 
+                      sx={{
                         py: 1.5,
                         minHeight: 48,
                         textTransform: 'none',
@@ -320,8 +301,8 @@ export default function SuperAdminDashboard() {
               <Typography variant="h6" fontWeight="bold">
                 Recent Bookings
               </Typography>
-              <Button 
-                variant="text" 
+              <Button
+                variant="text"
                 onClick={() => handleNavigation('/admin/bookings')}
                 startIcon={<Assessment />}
               >
@@ -349,11 +330,11 @@ export default function SuperAdminDashboard() {
                       </TableCell>
                       <TableCell>₹{booking.totalAmount || 0}</TableCell>
                       <TableCell>
-                        <Chip 
-                          label={booking.bookingStatus || 'confirmed'} 
+                        <Chip
+                          label={booking.bookingStatus || 'confirmed'}
                           color={
-                            booking.bookingStatus === 'confirmed' ? 'success' : 
-                            booking.bookingStatus === 'cancelled' ? 'error' : 'default'
+                            booking.bookingStatus === 'confirmed' ? 'success' :
+                              booking.bookingStatus === 'cancelled' ? 'error' : 'default'
                           }
                           size="small"
                         />
@@ -365,43 +346,6 @@ export default function SuperAdminDashboard() {
             </TableContainer>
           </Paper>
         )}
-
-        {/* Debug Section - Remove in production */}
-        <Paper sx={{ p: 3, mt: 3, bgcolor: 'grey.50' }}>
-          <Typography variant="h6" sx={{ mb: 2 }}>Debug Section</Typography>
-          <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
-            <Button 
-              variant="contained" 
-              color="error" 
-              onClick={testFunction}
-            >
-              Test Click (Should show alert)
-            </Button>
-            <Button 
-              variant="contained" 
-              color="warning" 
-              onClick={() => handleNavigation('/admin/events')}
-            >
-              Direct Events Navigation
-            </Button>
-            <Button 
-              variant="contained" 
-              color="info" 
-              onClick={() => console.log('Simple console test')}
-            >
-              Console Test
-            </Button>
-            <Button 
-              variant="contained" 
-              onClick={() => window.location.href = '/admin/events'}
-            >
-              Force Navigate (window.location)
-            </Button>
-          </Box>
-          <Typography variant="caption" color="text.secondary" sx={{ mt: 2, display: 'block' }}>
-            {"Check browser console for navigation logs. If none of these buttons work, there's a fundamental issue."}
-          </Typography>
-        </Paper>
       </Container>
     </Box>
   )

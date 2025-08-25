@@ -1,11 +1,8 @@
 import { NextResponse } from 'next/server'
 import dbConnect from '@/lib/mongodb'
-import { requireAuth } from '@/lib/adminAuth'
 import Booking from '@/models/Booking'
-import Screen from '@/models/Screen'
-import Location from '@/models/Location'
+import { requireAuth } from '@/lib/adminAuth'
 
-// Get all bookings with filters
 export async function GET(request) {
   try {
     const user = await requireAuth(request)
@@ -17,44 +14,33 @@ export async function GET(request) {
     const status = searchParams.get('status')
     const startDate = searchParams.get('startDate')
     const endDate = searchParams.get('endDate')
-    const page = parseInt(searchParams.get('page') || '1')
-    const limit = parseInt(searchParams.get('limit') || '20')
 
-    let filter = {}
+    // ✅ Build query with location restrictions
+    let query = {}
 
-    // For non-super admins, only show bookings from their assigned locations
+    // ✅ Filter by user's assigned locations (unless super admin)
     if (user.role !== 'super_admin') {
       const userLocationIds = user.assignedLocations.map(loc => 
         typeof loc === 'object' ? loc._id.toString() : loc.toString()
       )
-      filter.location = { $in: userLocationIds }
+      query.location = { $in: userLocationIds }
     }
 
-    // Apply filters
-    if (location) filter.location = location
-    if (screen) filter.screen = screen
-    if (status) filter.bookingStatus = status
-
-    // Date range filter
+    // Apply additional filters
+    if (location) query.location = location
+    if (screen) query.screen = screen
+    if (status) query.bookingStatus = status
+    
     if (startDate || endDate) {
-      filter.bookingDate = {}
-      if (startDate) filter.bookingDate.$gte = new Date(startDate)
-      if (endDate) filter.bookingDate.$lte = new Date(endDate)
+      query.bookingDate = {}
+      if (startDate) query.bookingDate.$gte = new Date(startDate)
+      if (endDate) query.bookingDate.$lte = new Date(endDate)
     }
 
-    const skip = (page - 1) * limit
-
-    const [bookings, totalCount] = await Promise.all([
-      Booking.find(filter)
-        .populate('screen', 'name capacity')
-        .populate('location', 'name address')
-        .populate('createdBy', 'username')
-        .sort({ createdAt: -1 })
-        .skip(skip)
-        .limit(limit)
-        .lean(),
-      Booking.countDocuments(filter)
-    ])
+    const bookings = await Booking.find(query)
+      .populate(['screen', 'location', 'createdBy', 'lastModifiedBy'])
+      .sort({ createdAt: -1 })
+      .lean()
 
     const transformedBookings = bookings.map(booking => ({
       id: booking._id.toString(),
@@ -70,28 +56,21 @@ export async function GET(request) {
       pricing: booking.pricing,
       paymentInfo: booking.paymentInfo,
       bookingStatus: booking.bookingStatus,
-      createdBy: booking.createdBy,
       createdAt: booking.createdAt,
       updatedAt: booking.updatedAt
     }))
 
-    return NextResponse.json({
-      success: true,
-      bookings: transformedBookings,
-      pagination: {
-        page,
-        limit,
-        totalCount,
-        totalPages: Math.ceil(totalCount / limit)
-      }
+    return NextResponse.json({ 
+      success: true, 
+      bookings: transformedBookings 
     })
 
   } catch (error) {
     console.error('Get bookings error:', error)
-    const code = error.message.includes('Authentication') ? 401 : 500
-    return NextResponse.json({ error: error.message }, { status: code })
+    return NextResponse.json({ error: 'Failed to fetch bookings' }, { status: 500 })
   }
 }
+
 
 // Create new booking
 export async function POST(request) {
