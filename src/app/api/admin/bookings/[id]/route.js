@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import dbConnect from '@/lib/mongodb'
 import Booking from '@/models/Booking'
-import { requireAuth } from '@/lib/auth'
+import { requireAuth } from '@/lib/adminAuth'
 import { sendBookingUpdateEmail, sendBookingCancellationEmail } from '@/lib/email'
 
 export async function PUT(request, { params }) {

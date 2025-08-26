@@ -1193,7 +1193,7 @@ export default function PublicBookingPage() {
                         💬 Special Instructions:
                       </Typography>
                       <Typography variant="body2" sx={{ fontStyle: 'italic' }}>
-                        "{bookingForm.specialRequests.customMessage}"
+                        {bookingForm.specialRequests.customMessage}
                       </Typography>
                     </Box>
                   )}
@@ -1327,7 +1327,7 @@ export default function PublicBookingPage() {
                 Your booking ID will be generated after confirmation
               </Typography>
               <Typography variant="caption" color="text.secondary">
-                You'll receive it via email and SMS
+                {"You'll receive it via email and SMS"}
               </Typography>
             </Box>
           </Stack>
