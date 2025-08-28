@@ -4,6 +4,7 @@ import { Box, Typography, Button, Container } from "@mui/material";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import wine1 from "../../assets/se1.1.jpg";
+import Link from "next/link";
 
 export default function ExclusiveEvents() {
   const router = useRouter();
@@ -49,42 +50,58 @@ export default function ExclusiveEvents() {
             />
             
             {/* Overlay Text - Exclusive */}
-            <Typography
+           <Typography
               variant="h2"
               sx={{
-                position: "absolute",
-                top: { xs: "-12%", sm: "-10%", md: "-8%", lg: "-10%" },
-                right: { xs: "0%", sm: "5%", md: "10%", lg: "15%" },
+                // position: "absolute",
+                // top: { xs: "-12%", sm: "-10%", md: "-8%", lg: "-10%" },
+                // right: { xs: "0%", sm: "5%", md: "10%", lg: "15%" },
+                // fontFamily: '"Cormorant", serif',
+                // fontStyle: "italic",
+                // fontWeight: 400,
+                // fontSize: { xs: "1.5rem", sm: "2rem", md: "2.5rem", lg: "4rem" },
+                // color: "#D50A17",
+                // textShadow: "2px 2px 4px rgba(0,0,0,0.2)",
+                // zIndex: 2,
+                // userSelect: "none",
+                // whiteSpace: "nowrap",
+                 position: "absolute",
+                top: { xs: "-8%", md: "-8%", lg: "-12%" },
+                left: { xs: "70%", md: "60%", lg: "45%" },
                 fontFamily: '"Cormorant", serif',
                 fontStyle: "italic",
                 fontWeight: 400,
-                fontSize: { xs: "1.5rem", sm: "2rem", md: "2.5rem", lg: "4rem" },
+                fontSize: { xs: "2rem", md: "3rem", lg: "6rem" },
                 color: "#D50A17",
-                textShadow: "2px 2px 4px rgba(0,0,0,0.2)",
-                zIndex: 2,
-                userSelect: "none",
-                whiteSpace: "nowrap",
               }}
             >
               Exclusive
             </Typography>
             
             {/* Overlay Text - Events */}
-            <Typography
+           <Typography
               variant="h2"
               sx={{
-                position: "absolute",
-                bottom: { xs: "-12%", sm: "-10%", md: "-8%", lg: "-10%" },
-                left: { xs: "0%", sm: "0%", md: "-5%", lg: "-10%" },
+                // position: "absolute",
+                // bottom: { xs: "-12%", sm: "-10%", md: "-8%", lg: "-10%" },
+                // left: { xs: "0%", sm: "0%", md: "-5%", lg: "-10%" },
+                // fontFamily: '"Cormorant", serif',
+                // fontStyle: "italic",
+                // fontWeight: 400,
+                // fontSize: { xs: "1.5rem", sm: "2rem", md: "2.5rem", lg: "4rem" },
+                // color: "#D50A17",
+                // textShadow: "2px 2px 4px rgba(0,0,0,0.2)",
+                // zIndex: 2,
+                // userSelect: "none",
+                // whiteSpace: "nowrap",
+                 position: "absolute",
+                bottom: { xs: "-6%", md: "-5%", lg: "-10%" },
+                left: { xs: "-6%", md: "-12%", lg: "-12%" },
                 fontFamily: '"Cormorant", serif',
                 fontStyle: "italic",
                 fontWeight: 400,
-                fontSize: { xs: "1.5rem", sm: "2rem", md: "2.5rem", lg: "4rem" },
+                fontSize: { xs: "2rem", md: "3rem", lg: "6rem" },
                 color: "#D50A17",
-                textShadow: "2px 2px 4px rgba(0,0,0,0.2)",
-                zIndex: 2,
-                userSelect: "none",
-                whiteSpace: "nowrap",
               }}
             >
               Events
@@ -143,6 +160,8 @@ export default function ExclusiveEvents() {
               <Button
                 variant="contained"
                 onClick={handleBookingClick}
+                component={Link}
+                    href="/book"
                 sx={{
                   bgcolor: "#D50A17",
                   "&:hover": { 

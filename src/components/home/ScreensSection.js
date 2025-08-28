@@ -103,6 +103,24 @@ export default function ScreensSection() {
     return visible.filter(Boolean)
   }
 
+  // Calculate how many amenities to show in 2 lines
+  const getAmenitiesDisplay = (amenities) => {
+    if (!amenities) return { visible: [], count: 0 }
+    
+    // Estimate chips per line based on screen size
+    const chipsPerLine = isMobile ? 2 : isTablet ? 3 : 4
+    const maxVisible = chipsPerLine * 2 // 2 lines
+    
+    if (amenities.length <= maxVisible) {
+      return { visible: amenities, count: 0 }
+    }
+    
+    return {
+      visible: amenities.slice(0, maxVisible - 1), // Leave space for "+X more" chip
+      count: amenities.length - (maxVisible - 1)
+    }
+  }
+
   const visibleScreens = getVisibleScreens()
   const showNavigation = screens.length > itemsPerView
 
@@ -223,151 +241,172 @@ export default function ScreensSection() {
                   px: { xs: 1, sm: 0 },
                 }}
               >
-                {visibleScreens.map((screen, idx) => (
-                  <Card
-                    key={`${currentIndex}-${idx}`}
-                    onClick={() => handleBookNow(screen)}
-                    sx={{
-                      borderRadius: { xs: 1.5, sm: 2 },
-                      overflow: 'hidden',
-                      cursor: 'pointer',
-                      transition: 'transform 0.3s ease, box-shadow 0.3s ease',
-                      '&:hover': {
-                        transform: { xs: 'translateY(-2px)', sm: 'translateY(-5px)' },
-                        boxShadow: { xs: 3, sm: 6 },
-                      },
-                      height: 'fit-content',
-                    }}
-                  >
-                    {screen.images?.length > 0 && (
-                      <CardMedia
-                        component="img"
-                        height={isMobile ? "160" : "180"}
-                        image={screen.images[0].url}
-                        alt={screen.images[0].alt || screen.name}
-                        sx={{
-                          objectFit: 'cover',
-                        }}
-                      />
-                    )}
-                    <CardContent sx={{ p: { xs: 2, sm: 2.5, md: 3 } }}>
-                      <Box
-                        display="flex"
-                        alignItems="center"
-                        gap={1}
-                        mb={1}
-                      >
-                        <Movie 
-                          color="primary" 
-                          sx={{ fontSize: { xs: 20, sm: 24 } }} 
+                {visibleScreens.map((screen, idx) => {
+                  const amenitiesDisplay = getAmenitiesDisplay(screen.amenities)
+                  
+                  return (
+                    <Card
+                      key={`${currentIndex}-${idx}`}
+                      onClick={() => handleBookNow(screen)}
+                      sx={{
+                        borderRadius: { xs: 1.5, sm: 2 },
+                        overflow: 'hidden',
+                        cursor: 'pointer',
+                        transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+                        '&:hover': {
+                          transform: { xs: 'translateY(-2px)', sm: 'translateY(-5px)' },
+                          boxShadow: { xs: 3, sm: 6 },
+                        },
+                        // Fixed height for consistent card sizes
+                        height: {
+                          xs: 'auto',
+                          sm: 500,
+                          md: 450,
+                        },
+                        display: 'flex',
+                        flexDirection: 'column',
+                      }}
+                    >
+                      {screen.images?.length > 0 && (
+                        <CardMedia
+                          component="img"
+                          height={isMobile ? "160" : "180"}
+                          image={screen.images[0].url}
+                          alt={screen.images[0].alt || screen.name}
+                          sx={{
+                            objectFit: 'cover',
+                            flexShrink: 0,
+                          }}
                         />
-                        <Typography 
-                          variant="h6" 
-                          fontWeight={600}
-                          sx={{
-                            fontSize: { xs: '1.1rem', sm: '1.25rem' },
-                            lineHeight: 1.3,
-                          }}
-                        >
-                          {screen.name}
-                        </Typography>
-                      </Box>
-                      
-                      <Typography 
-                        color="text.secondary" 
-                        mb={2}
-                        sx={{
-                          fontSize: { xs: '0.875rem', sm: '1rem' },
-                          lineHeight: 1.4,
-                          display: '-webkit-box',
-                          WebkitLineClamp: { xs: 2, sm: 3 },
-                          WebkitBoxOrient: 'vertical',
-                          overflow: 'hidden',
+                      )}
+                      <CardContent 
+                        sx={{ 
+                          p: { xs: 2, sm: 2.5, md: 3 },
+                          flex: 1,
+                          display: 'flex',
+                          flexDirection: 'column',
                         }}
                       >
-                        {screen.description}
-                      </Typography>
-
-                      <Box
-                        display="flex"
-                        flexDirection={{ xs: 'column', sm: 'row' }}
-                        justifyContent={{ sm: 'space-between' }}
-                        alignItems={{ xs: 'flex-start', sm: 'center' }}
-                        gap={{ xs: 1, sm: 2 }}
-                        mb={2}
-                      >
-                        <Typography 
-                          variant="body2"
-                          sx={{
-                            fontSize: { xs: '0.875rem', sm: '0.925rem' },
-                          }}
+                        <Box
+                          display="flex"
+                          alignItems="center"
+                          gap={1}
+                          mb={1}
                         >
-                          Capacity:{' '}
-                          <Box
-                            component="span"
-                            sx={{ 
-                              color: '#D50A17', 
-                              fontWeight: 'bold',
-                              fontSize: { xs: '0.925rem', sm: '1rem' },
+                          <Movie 
+                            color="primary" 
+                            sx={{ fontSize: { xs: 20, sm: 24 } }} 
+                          />
+                          <Typography 
+                            variant="h6" 
+                            fontWeight={600}
+                            sx={{
+                              fontSize: { xs: '1.1rem', sm: '1.25rem' },
+                              lineHeight: 1.3,
                             }}
                           >
-                            {screen.capacity}
-                          </Box>
-                        </Typography>
-
+                            {screen.name}
+                          </Typography>
+                        </Box>
+                        
                         <Typography 
-                          variant="body2"
+                          color="text.secondary" 
+                          mb={2}
                           sx={{
-                            fontSize: { xs: '0.875rem', sm: '0.925rem' },
+                            fontSize: { xs: '0.875rem', sm: '1rem' },
+                            lineHeight: 1.4,
+                            display: '-webkit-box',
+                            WebkitLineClamp: { xs: 2, sm: 3 },
+                            WebkitBoxOrient: 'vertical',
+                            overflow: 'hidden',
                           }}
                         >
-                          Price:{' '}
-                          <Box
-                            component="span"
-                            sx={{ 
-                              fontWeight: 'bold', 
-                              color: '#D50A17',
-                              fontSize: { xs: '0.925rem', sm: '1rem' },
+                          {screen.description}
+                        </Typography>
+
+                        <Box
+                          display="flex"
+                          flexDirection={{ xs: 'column', sm: 'row' }}
+                          justifyContent={{ sm: 'space-between' }}
+                          alignItems={{ xs: 'flex-start', sm: 'center' }}
+                          gap={{ xs: 1, sm: 2 }}
+                          mb={1.5} // Reduced from mb={2}
+                        >
+                          <Typography 
+                            variant="body2"
+                            sx={{
+                              fontSize: { xs: '0.875rem', sm: '0.925rem' },
                             }}
                           >
-                            ₹{screen.pricePerHour}/hour
-                          </Box>
-                        </Typography>
-                      </Box>
+                            Capacity:{' '}
+                            <Box
+                              component="span"
+                              sx={{ 
+                                color: '#D50A17', 
+                                fontWeight: 'bold',
+                                fontSize: { xs: '0.925rem', sm: '1rem' },
+                              }}
+                            >
+                              {screen.capacity}
+                            </Box>
+                          </Typography>
 
-                      <Box 
-                        display="flex" 
-                        flexWrap="wrap" 
-                        gap={{ xs: 0.5, sm: 1 }} 
-                        mt={1}
-                      >
-                        {screen.amenities?.slice(0, isMobile ? 3 : undefined).map((amenity) => (
-                          <Chip
-                            key={amenity}
-                            label={amenity}
-                            size="small"
-                            color="primary"
+                          <Typography 
+                            variant="body2"
                             sx={{
-                              fontSize: { xs: '0.75rem', sm: '0.875rem' },
-                              height: { xs: 24, sm: 28 },
+                              fontSize: { xs: '0.875rem', sm: '0.925rem' },
                             }}
-                          />
-                        ))}
-                        {isMobile && screen.amenities?.length > 3 && (
-                          <Chip
-                            label={`+${screen.amenities.length - 3} more`}
-                            size="small"
-                            variant="outlined"
-                            sx={{
-                              fontSize: '0.75rem',
-                              height: 24,
-                            }}
-                          />
-                        )}
-                      </Box>
-                    </CardContent>
-                  </Card>
-                ))}
+                          >
+                            Price:{' '}
+                            <Box
+                              component="span"
+                              sx={{ 
+                                fontWeight: 'bold', 
+                                color: '#D50A17',
+                                fontSize: { xs: '0.925rem', sm: '1rem' },
+                              }}
+                            >
+                              ₹{screen.pricePerHour}/hour
+                            </Box>
+                          </Typography>
+                        </Box>
+
+                        {/* Amenities section - removed mt: 'auto' and reduced spacing */}
+                        <Box 
+                          display="flex" 
+                          flexWrap="wrap" 
+                          gap={{ xs: 0.5, sm: 1 }}
+                          alignContent="flex-start"
+                        >
+                          {amenitiesDisplay.visible.map((amenity) => (
+                            <Chip
+                              key={amenity}
+                              label={amenity}
+                              size="small"
+                              color="primary"
+                              sx={{
+                                fontSize: { xs: '0.75rem', sm: '0.875rem' },
+                                height: { xs: 24, sm: 28 },
+                              }}
+                            />
+                          ))}
+                          {amenitiesDisplay.count > 0 && (
+                            <Chip
+                              label={`+${amenitiesDisplay.count} more`}
+                              size="small"
+                              variant="outlined"
+                              sx={{
+                                fontSize: { xs: '0.75rem', sm: '0.875rem' },
+                                height: { xs: 24, sm: 28 },
+                                color: 'text.secondary',
+                              }}
+                            />
+                          )}
+                        </Box>
+                      </CardContent>
+                    </Card>
+                  )
+                })}
               </Box>
             </Fade>
           </>

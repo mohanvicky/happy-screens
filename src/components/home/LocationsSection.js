@@ -11,11 +11,13 @@ import {
   IconButton,
   Fade,
   CircularProgress,
+  Chip,
+  Avatar,
 } from '@mui/material'
-import { ChevronLeft, ChevronRight, Place, Phone, Email } from '@mui/icons-material'
+import { ChevronLeft, ChevronRight, Place, Phone, Email, LocationOn } from '@mui/icons-material'
 
 export default function LocationsSection() {
-  const router = useRouter() // ✅ Add router for navigation
+  const router = useRouter()
   const [locations, setLocations] = useState([])
   const [loading, setLoading] = useState(true)
   const [currentIndex, setCurrentIndex] = useState(0)
@@ -49,20 +51,17 @@ export default function LocationsSection() {
     }, 200)
   }
 
-  // ✅ Handle location card click - navigate to booking page
   const handleLocationClick = (location) => {
     console.log('Location selected:', location)
-    
-    // Navigate to booking page with location pre-selected
     router.push(`/book?location=${location.id}`)
   }
 
   const visible = locations.length
     ? [
-      locations[currentIndex],
-      locations[(currentIndex + 1) % locations.length],
-      locations[(currentIndex + 2) % locations.length],
-    ]
+        locations[currentIndex],
+        locations[(currentIndex + 1) % locations.length],
+        locations[(currentIndex + 2) % locations.length],
+      ]
     : []
 
   return (
@@ -90,10 +89,24 @@ export default function LocationsSection() {
         ) : (
           <>
             <Box display="flex" justifyContent="space-between" mb={4}>
-              <IconButton onClick={() => handleNavigation('prev')}>
+              <IconButton 
+                onClick={() => handleNavigation('prev')}
+                sx={{
+                  bgcolor: 'white',
+                  boxShadow: 2,
+                  '&:hover': { bgcolor: '#f5f5f5' }
+                }}
+              >
                 <ChevronLeft />
               </IconButton>
-              <IconButton onClick={() => handleNavigation('next')}>
+              <IconButton 
+                onClick={() => handleNavigation('next')}
+                sx={{
+                  bgcolor: 'white',
+                  boxShadow: 2,
+                  '&:hover': { bgcolor: '#f5f5f5' }
+                }}
+              >
                 <ChevronRight />
               </IconButton>
             </Box>
@@ -110,47 +123,171 @@ export default function LocationsSection() {
                   <Card 
                     key={loc.id} 
                     sx={{ 
-                      borderTop: '4px solid #000', 
-                      borderRadius: 2, 
+                      borderRadius: 3,
                       overflow: 'hidden',
-                      cursor: 'pointer', // ✅ Add cursor pointer
-                      transition: 'all 0.3s ease',
+                      cursor: 'pointer',
+                      position: 'relative',
+                      transition: 'all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+                      boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
                       '&:hover': {
-                        transform: 'translateY(-4px)',
-                        boxShadow: 4
+                        transform: 'translateY(-8px) scale(1.02)',
+                        boxShadow: '0 20px 40px rgba(0,0,0,0.15)',
                       }
                     }}
-                    onClick={() => handleLocationClick(loc)} // ✅ Add click handler
+                    onClick={() => handleLocationClick(loc)}
                   >
-                    {/* ✅ Show location images if available */}
-                    {loc.images?.length > 0 && (
-                      <CardMedia
-                        component="img"
-                        height="180"
-                        image={loc.images[0].url}
-                        alt={loc.images[0].alt || loc.name}
-                        sx={{ objectFit: 'cover' }}
+                    {/* Enhanced image section */}
+                    <Box sx={{ position: 'relative', overflow: 'hidden' }}>
+                      {loc.images?.length > 0 ? (
+                        <CardMedia
+                          component="img"
+                          height="220"
+                          image={loc.images[0].url}
+                          alt={loc.images[0].alt || loc.name}
+                          sx={{ 
+                            objectFit: 'cover',
+                            transition: 'transform 0.4s ease',
+                            '&:hover': {
+                              transform: 'scale(1.1)'
+                            }
+                          }}
+                        />
+                      ) : (
+                        // Fallback gradient background with location icon
+                        <Box
+                          sx={{
+                            height: 220,
+                            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            color: 'white'
+                          }}
+                        >
+                          <LocationOn sx={{ fontSize: 60, opacity: 0.8 }} />
+                        </Box>
+                      )}
+                      
+                      {/* Location status chip */}
+                      {/* <Chip
+                        label="Available"
+                        size="small"
+                        sx={{
+                          position: 'absolute',
+                          top: 12,
+                          right: 12,
+                          bgcolor: '#4caf50',
+                          color: 'white',
+                          fontWeight: 600,
+                          '& .MuiChip-label': { px: 1.5 }
+                        }}
+                      /> */}
+                      
+                      {/* Gradient overlay for better text readability */}
+                      <Box
+                        sx={{
+                          position: 'absolute',
+                          bottom: 0,
+                          left: 0,
+                          right: 0,
+                          height: '50%',
+                          background: 'linear-gradient(transparent, rgba(0,0,0,0.1))',
+                          pointerEvents: 'none'
+                        }}
                       />
-                    )}
+                    </Box>
                     
-                    <CardContent>
-                      <Box display="flex" alignItems="center" gap={1} mb={1}>
-                        <Place color="primary" />
-                        <Typography variant="h6" fontWeight={600}>
+                    <CardContent sx={{ p: 3 }}>
+                      {/* Location name with enhanced styling */}
+                      <Box display="flex" alignItems="center" gap={1.5} mb={2}>
+                        <Avatar sx={{ bgcolor: '#D50A17', width: 32, height: 32 }}>
+                          <Place fontSize="small" />
+                        </Avatar>
+                        <Typography 
+                          variant="h6" 
+                          fontWeight={700}
+                          sx={{
+                            fontSize: '1.1rem',
+                            color: '#1a1a1a',
+                            letterSpacing: '-0.5px'
+                          }}
+                        >
                           {loc.name}
                         </Typography>
                       </Box>
-                      <Typography color="text.secondary" mb={2}>
+                      
+                      {/* Address with better spacing */}
+                      <Typography 
+                        color="text.secondary" 
+                        sx={{ 
+                          mb: 2.5, 
+                          lineHeight: 1.6,
+                          fontSize: '0.95rem'
+                        }}
+                      >
                         {loc.address?.street}, {loc.address?.area}, {loc.address?.city}
                       </Typography>
-                      <Box display="flex" alignItems="center" gap={1} mb={2}>
-                        <Phone fontSize="small" sx={{ color: '#D50A17' }} />
-                        <Typography variant="body2">{loc.contactInfo?.phone}</Typography>
+                      
+                      {/* Contact info with improved layout */}
+                      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
+                        <Box display="flex" alignItems="center" gap={1.5}>
+                          <Phone 
+                            fontSize="small" 
+                            sx={{ 
+                              color: '#D50A17',
+                              bgcolor: '#fff0f0',
+                              p: 0.5,
+                              borderRadius: 1,
+                              width: 24,
+                              height: 24
+                            }} 
+                          />
+                          <Typography 
+                            variant="body2" 
+                            sx={{ 
+                              fontWeight: 500,
+                              color: '#333'
+                            }}
+                          >
+                            {loc.contactInfo?.phone}
+                          </Typography>
+                        </Box>
+                        
+                        <Box display="flex" alignItems="center" gap={1.5}>
+                          <Email 
+                            fontSize="small" 
+                            sx={{ 
+                              color: '#666',
+                              bgcolor: '#f8f8f8',
+                              p: 0.5,
+                              borderRadius: 1,
+                              width: 24,
+                              height: 24
+                            }}
+                          />
+                          <Typography 
+                            variant="body2"
+                            sx={{ 
+                              color: '#666',
+                              fontWeight: 400
+                            }}
+                          >
+                            {loc.contactInfo?.email}
+                          </Typography>
+                        </Box>
                       </Box>
-                      <Box display="flex" alignItems="center" gap={1} mb={2}>
-                        <Email fontSize="small" color="action" />
-                        <Typography variant="body2">{loc.contactInfo?.email}</Typography>
-                      </Box>
+                      
+                      {/* Subtle bottom accent */}
+                      <Box
+                        sx={{
+                          position: 'absolute',
+                          bottom: 0,
+                          left: 0,
+                          right: 0,
+                          height: 3,
+                          background: 'linear-gradient(90deg, #D50A17 0%, #ff4569 100%)'
+                        }}
+                      />
                     </CardContent>
                   </Card>
                 ))}

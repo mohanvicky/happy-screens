@@ -610,7 +610,7 @@ const HeroSection = () => {
                     sx={{ borderRadius: 3 }} 
                   />
                 ) : (
-                  <Box sx={{ px: 2 }}>
+                  <Box sx={{ px: 2, width: "280px" }}>
                     {renderContentCarousel()}
                   </Box>
                 )}

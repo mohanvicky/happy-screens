@@ -21,7 +21,7 @@ export default function Home() {
       <SectionWork5 />
       <LocationsSection/>
       <ScreensSection />
-      <PromotionsBanner />
+      {/* <PromotionsBanner /> */}
       <TestimonialsSection />
 
     </>

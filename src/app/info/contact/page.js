@@ -119,58 +119,105 @@ export default function LocationsCarousel() {
     >
       {/* Left side: form */}
       <Box
-        sx={{
-          flex: 1,
-          backgroundColor: "#000",
-          p: { xs: 4, md: 6 },
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-        }}
-      >
-        <Typography variant="h4" fontWeight="bold" mb={2}  sx={{  fontSize: { xs: '2rem', md: '3rem', lg:'48px' }, fontStyle :'italic', 
-              fontFamily: '"Cormorant", serif', fontWeight:400, color:'#fff'
-            }}
+  sx={{
+    flex: 1,
+    backgroundColor: "#000",
+    p: { xs: 4, md: 6 },
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+  }}
 >
-          Get in <Box component="span" color="red">Touch</Box>
-        </Typography>
-        <Typography variant="body1" mb={4}  sx={{color:'#fff'}}>
-          {"We'd love to hear from you! Reach out to us with your questions, ideas, or feedback — we're just a message away."}
-        </Typography>
+  <Typography
+    variant="h4"
+    mb={2}
+    sx={{
+      fontSize: { xs: "2rem", md: "3rem", lg: "48px" },
+      fontStyle: "italic",
+      fontFamily: '"Cormorant", serif',
+      fontWeight: 400,
+      color: "#fff",
+    }}
+  >
+    Get in <Box component="span" color="red">Touch</Box>
+  </Typography>
+  <Typography variant="body1" mb={4} sx={{ color: "#fff" }}>
+    {"We'd love to hear from you! Reach out to us with your questions, ideas, or feedback — we're just a message away."}
+  </Typography>
 
-        <TextField label="Name" variant="outlined" fullWidth sx={{ mb: 2, color:'#fff' }} />
-        <TextField label="Email" variant="outlined" fullWidth sx={{ mb: 2 , color:'#fff'}} />
-        <TextField label="Phone Number" variant="outlined" fullWidth sx={{ mb: 2, color:'#fff' }} />
-        <TextField
-          label=""
-          variant="outlined"
-          select
-          fullWidth
-          sx={{ mb: 2, color:'#fff' }}
-          SelectProps={{ native: true }}
-        >
-          <option value="">Select</option>
-          <option value="google">Google</option>
-          <option value="social">Social Media</option>
-          <option value="friend">Friend</option>
-        </TextField>
+  {/* Name */}
+  <TextField
+    label="Name"
+    variant="outlined"
+    fullWidth
+    sx={{ mb: 2 }}
+    InputLabelProps={{ style: { color: "#fff" } }}
+    InputProps={{ style: { color: "#fff" } }}
+  />
 
-        <Button variant="contained" color="error" sx={{ mt: 1 }}>
-          SEND
-        </Button>
+  {/* Email */}
+  <TextField
+    label="Email"
+    variant="outlined"
+    fullWidth
+    sx={{ mb: 2 }}
+    InputLabelProps={{ style: { color: "#fff" } }}
+    InputProps={{ style: { color: "#fff" } }}
+  />
 
-        {/* Contact info */}
-        <Box sx={{ display: "flex", gap: 3, mt: 4 }}>
-          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-            <Box component="span">📞</Box>
-            <Typography variant="body2" sx={{color:'#fff'}}>+91 7702505644</Typography>
-          </Box>
-          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-            <Box component="span">✉️</Box>
-            <Typography variant="body2" sx={{color:'#fff'}}>east@bsplar.com</Typography>
-          </Box>
-        </Box>
-      </Box>
+  {/* Phone Number */}
+  <TextField
+    label="Phone Number"
+    variant="outlined"
+    fullWidth
+    sx={{ mb: 2 }}
+    InputLabelProps={{ style: { color: "#fff" } }}
+    InputProps={{ style: { color: "#fff" } }}
+  />
+
+  {/* Select */}
+  <TextField
+    label="How did you hear about us?"
+    variant="outlined"
+    select
+    fullWidth
+    sx={{
+      mb: 2,
+      "& .MuiOutlinedInput-root": {
+        color: "#fff",
+        "& fieldset": { borderColor: "#fff" },
+        "&:hover fieldset": { borderColor: "red" },
+        "&.Mui-focused fieldset": { borderColor: "red" },
+      },
+      "& .MuiSvgIcon-root": {
+        color: "#fff",
+      },
+    }}
+    SelectProps={{ native: true }}
+    InputLabelProps={{ style: { color: "#fff" } }}
+  >
+    <option value=""></option>
+    <option value="google">Google</option>
+    <option value="social">Social Media</option>
+    <option value="friend">Friend</option>
+  </TextField>
+
+  <Button variant="contained" color="error" sx={{ mt: 1 }}>
+    SEND
+  </Button>
+
+  {/* Contact info */}
+  <Box sx={{ display: "flex", gap: 3, mt: 4 }}>
+    <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+      <Box component="span">📞</Box>
+      <Typography variant="body2" sx={{ color: "#fff" }}>+91 7702505644</Typography>
+    </Box>
+    <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+      <Box component="span">✉️</Box>
+      <Typography variant="body2" sx={{ color: "#fff" }}>east@bsplar.com</Typography>
+    </Box>
+  </Box>
+</Box>
 
       {/* Right side: map */}
       <Box

@@ -27,7 +27,7 @@ const PromotionsBanner = () => {
   const [visibleOffers, setVisibleOffers] = useState([])
 
   // Sample offers data (will come from admin later)
-  const offers = [
+ const offers = [
     {
       id: 1,
       title: "Birthday Special",
@@ -35,7 +35,7 @@ const PromotionsBanner = () => {
       discount: "25% OFF",
       validUntil: "31st Dec 2025",
       code: "BIRTHDAY25",
-      bgColor: "linear-gradient(135deg, #e50e0eff 0%, #fc0882ff 100%)",
+      bgColor: "linear-gradient(135deg, #e50e0eff 0%, #D50A17 100%)",
       applicable: "All screens"
     },
     {
@@ -55,7 +55,7 @@ const PromotionsBanner = () => {
       discount: "30% OFF",
       validUntil: "Limited time",
       code: "WELCOME30",
-      bgColor: "linear-gradient(135deg, #e50e0eff 0%, #fc0882ff 100%)",
+      bgColor: "linear-gradient(135deg, #e50e0eff 0%, #D50A17 100%)",
       applicable: "First booking only"
     }
   ]
@@ -71,7 +71,7 @@ const PromotionsBanner = () => {
   if (visibleOffers.length === 0) return null
 
   return (
-    <Box sx={{ py: { xs: 4, md: 6 }, bgcolor: '#EFEDE8' }}>
+    <Box sx={{ py: { xs: 4, md: 6 }, bgcolor: '#f8f7f4' }}>
       <Container maxWidth="lg">
         {/* Section Header */}
         <Box sx={{ textAlign: 'center', mb: 4 }}>

@@ -310,6 +310,7 @@ export default function GalleryPage() {
                     setSelectedScreen('') // Reset screen when location changes
                   }}
                   label="Location"
+                  sx={{minWidth: "200px"}}
                 >
                   <MenuItem value="">All Locations</MenuItem>
                   {locations.map(loc => (
@@ -329,6 +330,7 @@ export default function GalleryPage() {
                   onChange={e => setSelectedScreen(e.target.value || '')} 
                   disabled={!selectedLocation || screens.length === 0}
                   label="Screen"
+                  sx={{minWidth: "200px"}}
                 >
                   <MenuItem value="">All Screens</MenuItem>
                   {screens.map(scr => (
