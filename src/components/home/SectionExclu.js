@@ -67,7 +67,7 @@ export default function ExclusiveEvents() {
                 // whiteSpace: "nowrap",
                  position: "absolute",
                 top: { xs: "-8%", md: "-8%", lg: "-12%" },
-                left: { xs: "70%", md: "60%", lg: "45%" },
+                left: { xs: "57%", md: "60%", lg: "45%" },
                 fontFamily: '"Cormorant", serif',
                 fontStyle: "italic",
                 fontWeight: 400,

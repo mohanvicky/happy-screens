@@ -334,13 +334,13 @@ export default function BookingsManagementPage() {
               </Typography>
             </Box>
           </Box>
-          <Button 
+          {/* <Button 
             variant="contained" 
             startIcon={<Add />}
             onClick={() => router.push('/admin/bookings/create')}
           >
             New Booking
-          </Button>
+          </Button> */}
         </Box>
       </Box>
 
