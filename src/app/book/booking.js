@@ -459,6 +459,8 @@ export default function PublicBookingPage() {
                     bgcolor: bookingForm.screen === screen.id ? 'primary.50' : 'inherit',
                     transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
                     height: isMobile ? 480 : 520, // ✅ fixed height
+                     width: '100%',                // ✅ takes full Grid width (constant)
+                     maxWidth: 360, 
                     display: 'flex',
                     flexDirection: 'column',
                     borderRadius: 2,
@@ -489,6 +491,8 @@ export default function PublicBookingPage() {
                         image={screen.images[0].url}
                         alt={screen.name}
                         sx={{
+                           width: '100%',          // ✅ always span full card width
+                           height: '100%', 
                           objectFit: 'cover',
                           transition: 'transform 0.4s ease-in-out',
                           '&:hover': {

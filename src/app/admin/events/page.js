@@ -52,13 +52,14 @@ export default function EventsPage() {
     setIsEdit(true)
     setTargetEvent(ev)
     setForm({
-      title:ev.title, description:ev.description||'',
+      title:ev.name , description:ev.description||'',
       category:ev.category, duration:ev.duration, basePrice:ev.pricing.basePrice
     })
     setDialogOpen(true); handleCloseMenu()
   }
-
+ console.log(targetEvent)
   async function save() {
+  
     if(!form.title || !form.category) { setError('Title & category required'); return }
     const payload = {
       name: form.title, description: form.description,
@@ -72,6 +73,7 @@ export default function EventsPage() {
         headers:{'Content-Type':'application/json'},
         body: JSON.stringify(payload)
       })
+
       const data = await res.json()
       if(!res.ok) throw new Error(data.error||'Failed')
       setSuccess(isEdit ? 'Updated' : 'Created')

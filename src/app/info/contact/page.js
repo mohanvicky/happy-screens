@@ -102,13 +102,33 @@ export default function LocationsCarousel() {
   };
 
   const validatePhone = (value) => {
-    const regex = /^[6-9]\d{9}$/;
-    if (!regex.test(value)) {
-      setPhoneError("Enter valid 10-digit mobile number");
-    } else {
-      setPhoneError("");
-    }
-  };
+  // ✅ only digits allowed
+  if (!/^\d*$/.test(value)) {
+    setPhoneError("Only numbers are allowed");
+    return;
+  }
+
+  // ✅ exactly 10 digits required
+  if (value.length !== 10) {
+    setPhoneError("Phone number must be exactly 10 digits");
+    return;
+  }
+
+  // ✅ must start with 6,7,8,9
+  if (!/^[6-9]/.test(value)) {
+    setPhoneError("Invalid number");
+    return;
+  }
+
+  // ❌ block specific invalid pattern (example: 9876xxxxxx)
+ if (!/^[6-9]/.test(value)) {
+    setPhoneError("Invalid number pattern");
+    return;
+  }
+
+  // ✅ if all good
+  setPhoneError("");
+};
 
   const validateEmail = (value) => {
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -242,19 +262,21 @@ export default function LocationsCarousel() {
 
         {/* Phone */}
         <TextField
-          label="Phone Number"
-          variant="outlined"
-          fullWidth
-          value={phone}
-          onChange={(e) => {
-            setPhone(e.target.value);
-            validatePhone(e.target.value);
-          }}
-          error={!!phoneError}
-          helperText={phoneError}
-          sx={{ mb: 2, ...inputStyle }}
-          FormHelperTextProps={{ style: { color: "red" } }}
-        />
+  label="Phone Number"
+  variant="outlined"
+  fullWidth
+  value={phone}
+  onChange={(e) => {
+    setPhone(e.target.value);
+    validatePhone(e.target.value);
+  }}
+  error={!!phoneError}
+  helperText={phoneError}
+  sx={{ mb: 2, ...inputStyle }}
+  FormHelperTextProps={{ style: { color: "red" } }}
+  inputProps={{ maxLength: 10 }}   // ✅ limit input to 10 digits
+/>
+
 
         {/* Dropdown */}
         <TextField
