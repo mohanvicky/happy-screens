@@ -68,7 +68,7 @@ export async function POST(request) {
       }, { status: 400 })
     }
 
-    const location = await Location.create({
+    const location = await Location.create({ 
       ...locationData,
       createdBy: user._id
     })
