@@ -55,7 +55,7 @@ export default function EventsPage() {
       title:ev.name , description:ev.description||'',
       category:ev.category, duration:ev.duration, basePrice:ev.pricing.basePrice
     })
-    setDialogOpen(true); handleCloseMenu()
+    setDialogOpen(true); 
   }
  console.log(targetEvent)
   async function save() {
